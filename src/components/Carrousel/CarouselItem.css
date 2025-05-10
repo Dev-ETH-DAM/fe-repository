@@ -1,0 +1,18 @@
+.carousel-item {
+  height: 400px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.carousel-overlay {
+
+  padding: 2rem;
+  text-align: center;
+  border-radius: 12px;
+}

@@ -1,0 +1,12 @@
+.hero-section {
+  position: relative;
+  padding-top: 60px;
+  padding-bottom: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: blanchedalmond;
+
+
+}

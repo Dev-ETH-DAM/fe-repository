@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { deployStorageContract, getMessages } from "@/services/contractService";
+import os from 'os';
 import {
     useAccount,
     useConnect,
@@ -14,11 +15,23 @@ import {
 import { environment } from "@/enviroment/environment";
 import Navbar from "@/components/Navbar/Navbar";
 import CustomPaginationActionsTable from "@/components/Table/Table";
+import "./ConnectedLanding.css";
+import { BarChart } from '@mui/x-charts/BarChart';
+import { Gauge } from "@mui/x-charts";
+import Footer from "@/components/Footer/Footer";
 const sampleData = [
     { name: "Cupcake", calories: 305, fat: 3.7 },
     { name: "Donut", calories: 452, fat: 25.0 },
     { name: "Eclair", calories: 262, fat: 16.0 },
-    // ...
+    { name: "Cupcake", calories: 305, fat: 3.7 },
+    { name: "Donut", calories: 452, fat: 25.0 },
+    { name: "Eclair", calories: 262, fat: 16.0 },
+    { name: "Cupcake", calories: 305, fat: 3.7 },
+    { name: "Donut", calories: 452, fat: 25.0 },
+    { name: "Eclair", calories: 262, fat: 16.0 },
+    { name: "Cupcake", calories: 305, fat: 3.7 },
+    { name: "Donut", calories: 452, fat: 25.0 },
+    { name: "Eclair", calories: 262, fat: 16.0 },
 ];
 export default function ConnectedLanding() {
     const account = useAccount();
@@ -28,14 +41,13 @@ export default function ConnectedLanding() {
 
     const [nodes, setNodes] = useState<any[]>([]);
     const [status, setStatus] = useState<string>("");
-    console.log("2")
     useConnect();
     useWalletClient();
-    console.log("3")
-    // useEffect(() => {
-    //     console.log("another req")
-    //     handleReadMasterContract();
-    // }, []);
+
+    useEffect(() => {
+        handleReadMasterContract();
+    }, []);
+
 
     const handleReadMasterContract = async () => {
 
@@ -47,28 +59,6 @@ export default function ConnectedLanding() {
             setStatus(`Error: ${err.message}`);
         }
     };
-    // const [deployHash, setDeployHash] = useState<`0x${string}` | undefined>();
-
-
-    // const { data: deployReceipt, error: deployTxError } = useWaitForTransactionReceipt({
-    //     hash: deployHash,
-    //     confirmations: 1,
-    // });
-
-    // useEffect(() => {
-    //     if (deployReceipt?.contractAddress) {
-    //         setContractAddress(deployReceipt.contractAddress);
-    //     }
-    // }, [deployReceipt]);
-
-    // const doDeploy = async () => {
-    //     const hash = await deployStorageContract();
-    //     if (hash) {
-    //         console.log("Deploy hash set to", hash);
-    //         setDeployHash(hash);
-    //     }
-    // };
-
 
     const handleRead = async () => {
         if (!contractAddress) {
@@ -89,12 +79,43 @@ export default function ConnectedLanding() {
     return (
         <Box>
             <Navbar></Navbar>
-            <section className="hero-section">
+            <section className="conected-hero-section">
                 <div >
+                    <h1 className="hero-title-c">My stats for {account.chain?.name}</h1>
+                    <div >
+                        <div className="hero-content-c"> 
+            
+                            <Box className="box-align">
+                                <h1 className="hero-subtitle-c">CPU/RAM usage</h1>
+                                <Gauge width={100} height={100} value={Math.random() * (60 - 34) + 34} />
+                            </Box>
+                                <Box className="box-align">
+                                <h1 className="hero-subtitle-c">New Tasks posted</h1>
+                                <Gauge width={100} height={100} value={Math.random() * (60 - 34) + 34} />
+                            </Box>
+                                  <Box className="box-align">
+                                <h1 className="hero-subtitle-c">Owned tasks</h1>
+                                <Gauge width={100} height={100} value={Math.random() * (60 - 34) + 34} />
+                            </Box>
+                        </div>
+                        <h1 className="hero-subtitle-c">Token usage</h1>
+                        <BarChart
+                            title=" Usage"
+                            series={[
+                                { data: [35, 1, 0, 0] },
+
+
+
+                            ]}
+                            height={290}
+                            xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'] }]}
+                        /></div>
+                    <h1 className="hero-title-c">Available tasks</h1>
+
                     <CustomPaginationActionsTable data={sampleData} />
                     <div>
 
-                        <label>
+                        {/* <label>
                             Contract Address:
                             <input
                                 type="text"
@@ -102,7 +123,7 @@ export default function ConnectedLanding() {
                                 onChange={(e) => setContractAddress(e.target.value as `0x${string}`)}
                                 placeholder="0x..."
                             />
-                        </label>
+                        </label> */}
                         <ul>
                             {nodes.map((node, i) => (
                                 <li key={i}>
@@ -112,7 +133,7 @@ export default function ConnectedLanding() {
                                 </li>
                             ))}
                         </ul>
-                        <br />
+                        {/* <br />
                         <div>
                             status: {account.status}
                             <br />
@@ -124,7 +145,7 @@ export default function ConnectedLanding() {
                             )}
                             chainId: {account.chainId}
                             {account.chain && <span>&nbsp;({account.chain?.name})</span>}
-                        </div>
+                        </div> */}
 
                         {/* <hr />
 
@@ -136,26 +157,11 @@ export default function ConnectedLanding() {
                     Contract: <span id="deployContractAddress">{deployReceipt?.contractAddress}</span>
 
                 </> */}
-                        <Button variant="contained" onClick={handleRead}>
-                            Read Messages
-                        </Button>
-                        {status && <p>{status}</p>}
-                        <ul>
-                            {messages.map((msg, i) => (
-                                <li key={i}>
-                                    <strong>Sender:</strong> {msg.sender}<br />
-                                    <strong>Time:</strong> {new Date(Number(msg.timestamp) * 1000).toLocaleString()}<br />
-                                    <strong>Content:</strong> {msg.content}
-                                </li>
-                            ))}
-                        </ul>
+
                     </div>
-                    {/* <p>Your wallet is connected. You can now send and receive messages.</p> */}
-                    <Button variant="outlined" onClick={() => disconnect()}>
-                        Disconnect Wallet
-                    </Button>
                     <br />
-                    <Link to="/receive">Go to Receive</Link></div> </section>
+                </div> </section>
+            <Footer></Footer>
         </Box>
     );
 }

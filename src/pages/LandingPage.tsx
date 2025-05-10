@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+// import { Link } from "react-router-dom";
+// import { useEffect, useState } from "react";
 import {
     useAccount,
     useConnect,
@@ -8,22 +8,22 @@ import {
     useWaitForTransactionReceipt,
     useWalletClient,
 } from "wagmi";
-import { Button } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import { isCalldataEnveloped } from "@oasisprotocol/sapphire-paratime";
+// import { Button } from "@mui/material";
+// import SendIcon from "@mui/icons-material/Send";
+// import { isCalldataEnveloped } from "@oasisprotocol/sapphire-paratime";
 
-import {
-    deployStorageContract,
-    sendMessage,
-    getMessages,
-} from "@/services/contractService";
+// import {
+//     deployStorageContract,
+//     sendMessage,
+//     getMessages,
+// } from "@/services/contractService";
 import ConnectedLanding from "@/ConnectedLanding.tsx/ConnectedLanding";
 import DisconnectedLanding from "@/components/DisconnectedLanding/DisconnectedLanding";
 
 
 export default function LandingPage() {
     const account = useAccount();
-    console.log("1")
+
     // const { connectors, connect, status, error } = useConnect();
     // const { disconnect } = useDisconnect();
     // const { data: walletClient } = useWalletClient();

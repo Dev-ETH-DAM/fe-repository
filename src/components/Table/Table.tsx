@@ -10,6 +10,7 @@ import {
 	Paper,
 	IconButton,
 	Box,
+	Button,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
@@ -84,7 +85,7 @@ export default function CustomPaginationActionsTable({ data }: Props) {
 
 	return (
 		<TableContainer component={Paper}>
-			<Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+			<Table sx={{ minWidth: 900 }} aria-label="custom pagination table">
 				<TableBody>
 					{(rowsPerPage > 0
 						? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -94,6 +95,9 @@ export default function CustomPaginationActionsTable({ data }: Props) {
 							{columns.map((key) => (
 								<TableCell key={key}>{row[key]}</TableCell>
 							))}
+							<TableCell>
+								<Button onClick={() => console.log(row)}>Log Row</Button>
+							</TableCell>
 						</TableRow>
 					))}
 					{emptyRows > 0 && (

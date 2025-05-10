@@ -1,12 +1,44 @@
-.hero-section {
+.conected-hero-section {
   position: relative;
   padding-top: 60px;
-  padding-bottom: 8rem;
+  margin-top: 30px;
+  padding-bottom: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  background-color: blanchedalmond;
+  width: 100vw;
+background-color: white;
 
 
+}
+.history {
+ height:80vh;
+}
+.hero-title-c {
+  color: black;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+.hero-subtitle-c {
+  color: black;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.hero-content-c {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.box-align {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 2rem;
 }

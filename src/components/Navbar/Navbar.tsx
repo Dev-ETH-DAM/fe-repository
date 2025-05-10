@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import { useNavigate } from 'react-router-dom';
+import { useDisconnect, } from "wagmi";
 interface Props {
   /**
    * Injected by the documentation to work in an iframe.
@@ -23,31 +25,40 @@ interface Props {
 }
 
 const drawerWidth = 240;
-const navItems = ['Home', 'Get Resources', 'Disconnect'];
+
 
 export default function Navbar(props: Props) {
+  const { disconnect } = useDisconnect();
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   const handleDrawerToggle = () => {
     setMobileOpen((prevState: any) => !prevState);
   };
-
+  
+  const navItems = [
+    { label: 'Home', action: () => navigate('/')  },
+    { label: 'Get Resources', action: () => navigate('/receive') },
+    { label: 'History', action: () => navigate('/history') },
+    { label: 'Disconnect', action: () => disconnect() },
+  ];
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
         RigaCrypto  <RocketLaunchIcon></RocketLaunchIcon>
       </Typography>
       <Divider />
+
       <List>
         {navItems.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item} />
+          <ListItem key={item.label} disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={item.action}>
+              <ListItemText primary={item.label} />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
+
     </Box>
   );
 
@@ -72,12 +83,12 @@ export default function Navbar(props: Props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-           RigaCrypto  <RocketLaunchIcon></RocketLaunchIcon>
+            RigaCrypto  <RocketLaunchIcon></RocketLaunchIcon>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
+              <Button key={item.label} sx={{ color: '#fff' }} onClick={item.action}>
+                {item.label}
               </Button>
             ))}
           </Box>
@@ -100,7 +111,7 @@ export default function Navbar(props: Props) {
           {drawer}
         </Drawer>
       </nav>
-     
+
     </Box>
   );
 }

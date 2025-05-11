@@ -35,7 +35,7 @@ export default function Navbar(props: Props) {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState: any) => !prevState);
   };
-  
+
   const navItems = [
     { label: 'Home', action: () => navigate('/')  },
     { label: 'Get Resources', action: () => navigate('/receive') },
@@ -45,7 +45,7 @@ export default function Navbar(props: Props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        RigaCrypto  <RocketLaunchIcon></RocketLaunchIcon>
+        ChainLab Grid  <RocketLaunchIcon></RocketLaunchIcon>
       </Typography>
       <Divider />
 
@@ -83,7 +83,7 @@ export default function Navbar(props: Props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            RigaCrypto  <RocketLaunchIcon></RocketLaunchIcon>
+            ChainLab Grid  <RocketLaunchIcon></RocketLaunchIcon>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import { sendMessage } from "@/services/contractService";
+import { addToRequestQueue, sendMessage } from "@/services/contractService";
 import { environment } from "@/enviroment/environment";
 import Navbar from "@/components/Navbar/Navbar";
 import UploadFileIcon from '@mui/icons-material/UploadFile';
@@ -16,17 +16,19 @@ import {
 	FormControl,
 	InputLabel,
 	Input,
+	Table,
+	TableHead,
+	TableRow,
+	TableCell,
+	TableBody,
 } from '@mui/material';
 import Footer from "@/components/Footer/Footer";
+import { Crumb } from "@/interfaces/interfaces";
 
 
 export default function ReceivePage() {
 
 	const account = useAccount();
-	const [contractAddress, setContractAddress] = useState<`0x${string}` | undefined>();
-	const [input, setInput] = useState<string>("");
-	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
-	const [status, setStatus] = useState<string>("");
 	const [taskName, setTaskName] = useState('');
 	const [crumbLevel, setCrumbLevel] = useState('LOW');
 	const [crumbAlias, setCrumbAlias] = useState('');
@@ -34,19 +36,75 @@ export default function ReceivePage() {
 	const [crumbReward, setCrumbReward] = useState('');
 	const [crumbTimeout, setCrumbTimeout] = useState('');
 	const [fileError, setFileError] = useState('');
+	const [totalPrice, setTotalPrice] = useState<number>(0);
+	const [crumbSetupTable, setCrumbSetupTable] = useState<Crumb[] | null>(null);
+	useEffect(() => {
+		if (crumbSetup && Array.isArray(crumbSetup)) {
+			const sum = crumbSetup.reduce((acc, crumb) => acc + crumb.price, 0);
+			setTotalPrice(sum);
+		} else {
+			setTotalPrice(0);
+		}
+	}, [crumbSetup]);
+
+
 	const handleSetupFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
 		try {
 			const text = await file.text();
-			const parsed = JSON.parse(text);
-			setCrumbSetup(parsed);
+			const json = JSON.parse(text);
+
+			if (!Array.isArray(json)) {
+				throw new Error('JSON root must be an array');
+			}
+
+			const isValid = json.every(
+				(item) =>
+					typeof item.alias_name === 'string' &&
+					typeof item.price === 'number' &&
+					typeof item.status === 'string' &&
+					typeof item.setup_task === 'string' &&
+					typeof item.setup_validation === 'string' &&
+					typeof item.result === 'string' &&
+					typeof item.assignee === 'string' &&
+					typeof item.max_run === 'number'
+			);
+
+			if (!isValid) {
+				throw new Error('One or more items are not valid crumbs');
+			}
+			const mapped: Crumb[] = json.map((item, idx) => {
+				if (
+					typeof item.alias_name !== 'string' ||
+					typeof item.price !== 'number' ||
+					typeof item.setup_task !== 'string' ||
+					typeof item.setup_validation !== 'string' ||
+					typeof item.max_run !== 'number'
+				) {
+					throw new Error(`Item ${idx} is not a valid crumb`);
+				}
+				return {
+					address: item.address ?? '',
+					id: (item.id ?? `0x${crypto.randomUUID()}`) as `0x${string}`,
+					aliasName: item.alias_name,
+					price: BigInt(item.price),
+					setupTask: item.setup_task,
+					setupValidation: item.setup_validation,
+					maxRun: item.max_run.toString(),
+					lastUpdated: new Date().toISOString(),
+					subContractAddress:
+						(item.sub_contract_address ??
+							'0x0000000000000000000000000000000000000000') as `0x${string}`,
+				};
+			});
+			setCrumbSetupTable(mapped)
+			setCrumbSetup(json);
 			setFileError('');
-		} catch (err) {
-			console.log(err)
-			setFileError('Invalid JSON file');
+		} catch (err: any) {
 			setCrumbSetup(null);
+			setFileError(`Invalid JSON: ${err.message}`);
 		}
 	};
 
@@ -66,26 +124,17 @@ export default function ReceivePage() {
 				reward: crumbReward,
 				timeout: crumbTimeout,
 			},
-			setup: crumbSetup, // This is the parsed JSON
+			setup: crumbSetup,
 		};
 
 		console.log('Crumb submitted:', payload);
 	};
-	const handleSend = async () => {
-		if (!account.address || !contractAddress) {
-			setStatus("Missing account or contract address");
-			return;
-		}
 
-		setStatus("Sending...");
-		try {
-			const randomContent = input;
-			const hash = await sendMessage(account.address, contractAddress, environment.mainTopic, randomContent);
-			setTxHash(hash);
-			setStatus("Message sent!");
-		} catch (err: any) {
-			setStatus(`Error: ${err.message}`);
-		}
+	const doWrite = async () => {
+		console.log("Writing to contract");
+		if (!account.address) return;
+		console.log(crumbSetup)
+		const hash = await addToRequestQueue(account.address, crumbSetup ? JSON.stringify(crumbSetup) : "{}", totalPrice.toString());
 	};
 
 	return (
@@ -94,33 +143,7 @@ export default function ReceivePage() {
 				<Navbar></Navbar>
 
 				<Box component="form" onSubmit={handleSubmit} sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 2, width: 800 }}>
-					<Typography variant="h6">Create Crumb</Typography>
-
-					<TextField
-						label="Task Name"
-						value={taskName}
-						onChange={(e) => setTaskName(e.target.value)}
-						required
-					/>
-
-					<FormControl fullWidth>
-						<InputLabel>Crumb Level</InputLabel>
-						<Select
-							value={crumbLevel}
-							label="Crumb Level"
-							onChange={(e) => setCrumbLevel(e.target.value)}
-						>
-							<MenuItem value="LOW">LOW (2GB RAM, 2 Cores)</MenuItem>
-							<MenuItem value="MID">MID (4GB RAM, 4 Cores)</MenuItem>
-							<MenuItem value="HIGH">HIGH (8GB RAM, 8 Cores)</MenuItem>
-						</Select>
-					</FormControl>
-
-					<TextField
-						label="Crumb Alias"
-						value={crumbAlias}
-						onChange={(e) => setCrumbAlias(e.target.value)}
-					/>
+					<Typography variant="h6">Create Job</Typography>
 
 					<FormControl fullWidth sx={{ mb: 2 }}>
 						<Typography variant="body2" sx={{ mb: 1 }}>
@@ -162,51 +185,50 @@ export default function ReceivePage() {
 							<Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
 								<CheckCircleIcon color="success" sx={{ mr: 1 }} />
 								<Typography variant="caption" color="success.main">
-									JSON loaded with {Object.keys(crumbSetup).length} keys
+									{crumbSetup.length} crumbs loaded successfully
 								</Typography>
 							</Box>
 						)}
 					</FormControl>
-					<TextField
-						label="Crumb Reward (e.g. credits, tokens)"
-						value={crumbReward}
-						onChange={(e) => setCrumbReward(e.target.value)}
-						required
-					/>
+					{crumbSetup && (
+						<Table sx={{ mt: 3 }} >
+							<TableHead>
+								<TableRow>
+									<TableCell>#</TableCell>
+									<TableCell>Alias</TableCell>
+									<TableCell align="right">Price</TableCell>
 
-					<TextField
-						label="Crumb Timeout (max run in hours)"
-						type="number"
-						inputProps={{ min: 1 }}
-						value={crumbTimeout}
-						onChange={(e) => setCrumbTimeout(e.target.value)}
-						required
-					/>
+									<TableCell align="right">Max&nbsp;Run</TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{crumbSetupTable?.map((c, i) => (
+									<TableRow key={c.id}>
+										<TableCell>{i + 1}</TableCell>
+										<TableCell>{c.aliasName}</TableCell>
+										<TableCell align="right">
+											{Number(c.price).toLocaleString()}
+										</TableCell>
 
-					<Button type="submit" variant="contained" color="primary">
-						Submit Crumb
+										<TableCell>
+											{c.maxRun !== undefined ? `${Number(c.maxRun) * 100} hours` : 'N/A'}
+										</TableCell>
+									</TableRow>
+								))}
+							</TableBody>
+						</Table>
+					)}
+
+					<Button type="submit" variant="contained" color="primary" onClick={doWrite}>
+						Submit Job
 					</Button>
-					{/* <h2>Send MessagEEEEEe</h2>
-				<input value={input} onChange={(e) => setInput(e.target.value)}></input>
-				<label>
-					Contract Address:
-					<input
-						type="text"
-						value={contractAddress || ""}
-						onChange={(e) => setContractAddress(e.target.value as `0x${string}`)}
-						placeholder="0x..."
-					/>
-				</label>
-				<br />
-				<Button variant="contained" onClick={handleSend}>
-					Send Random Message
-				</Button>
-				{status && <p>{status}</p>}
-				{txHash && <p>Tx Hash: {txHash}</p>} */}
+
+					<br />
+
 
 				</Box>
 
-			</div>
-			<Footer></Footer></div>
+			</div><div className="history-footer"><Footer ></Footer></div>
+		</div >
 	);
 }

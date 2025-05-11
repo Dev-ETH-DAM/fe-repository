@@ -8,22 +8,35 @@ import CarouselItem from "../Carrousel/CrrouselItem";
 export default function DisconnectedLanding() {
     const { connect, connectors } = useConnect();
     const items = [
-                {
-            name: "Random Name #2",
-            description: " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
-            image: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-        },
         {
-            name: "Random Name #1",
-            description: " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
+            name: "Supercharge Research in Minutes",
+            description:
+                "Launch thousands of trusted CPU & GPU cores on demand—no data center, no up-front cost. Our decentralized grid lets you go from idea to results faster than ever.",
             image: "https://plus.unsplash.com/premium_photo-1679923813998-6603ee2466c5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         },
         {
-            name: "Random Name #2",
-            description: " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation",
-            image: "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            name: "Earn While Your Hardware Rests",
+            description:
+                "Have idle GPUs or spare server time? Plug into the network, run workloads inside a TEE, and collect instant micro-payments for every validated subtask you complete.",
+            image:
+                "https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        },
+        {
+            name: "Confidential by Design",
+            description:
+                "Powered by Oasis Sapphire, each computation executes inside a Trusted Execution Environment, keeping data and models private—even from the node operator.",
+            image:
+                "https://images.unsplash.com/photo-1605902711622-cfb43c4437f4?auto=format&fit=crop&w=2070&q=80",
+        },
+        {
+            name: "From Laptop to Lab in One Click",
+            description:
+                "New to high-performance computing? Skip the hardware investment. Submit a job, set a budget, and watch your experiment scale horizontally across the grid.",
+            image:
+                "https://images.unsplash.com/photo-1581091870627-3ff9cf632b7a?auto=format&fit=crop&w=2070&q=80",
         },
     ];
+
 
     return (
 
@@ -38,10 +51,12 @@ export default function DisconnectedLanding() {
                 >
                     <span className="hero-overlay"></span>
                 </div>
-                <div className="hero-container">
-                    <h1 className="hero-title">Your resources. Your time. Our mission</h1>
+                <div className="hero-container"><h1 className="hero-title-0">Introducing ChainLab Grid</h1>
+                    <h1 className="hero-title">Your resources. Your privacy. Your freedom. Our mission</h1>
+
                     <p className="hero-description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                        Need breakthrough results now—but don’t own a data-center?
+                        Welcome to the Open Compute Grid: a decentralized, TEE-secured marketplace where you can spin up thousands of trusted cores in minutes, pay only for what you use, and keep your data private.
                     </p>
                     {connectors.map((connector: any) => (
                         <Button variant="contained" key={connector.uid} onClick={() => connect({ connector })} data-testid={connector.id}>
@@ -80,18 +95,18 @@ export default function DisconnectedLanding() {
                             <h3 className="feature-heading">New solution </h3>
                         </div>
                         <p className="text-muted">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            ChainLab Grid lets you share computational resources across the grid and earn or help while every step—validation, decomposition, execution, and payout—is cryptographically enforced by Oasis’ modern TEE and confidential-EVM stack.
                         </p>
                         <ul className="feature-list">
                             <li>
-                                <h4 className="feature-item">Lorem ipsum dolor sit amet,</h4>
+                                <h4 className="feature-item">Share computational resources across the grid, decentralized</h4>
                             </li>
                             <li>
-                                <h4 className="feature-item">Lorem ipsum dolor sit amet,</h4>
+                                <h4 className="feature-item">Earn/Help securely and validated by latest Oasis Technologies</h4>
                             </li>
                             <li>
                                 <h4 className="feature-item">
-                                    Lorem ipsum dolor sit amet,
+                                    Anyone can contribute, we validate and aggregate, securely by TEE
                                 </h4>
                             </li>
                         </ul>
@@ -104,9 +119,9 @@ export default function DisconnectedLanding() {
                         <div className="feature-icon-circle">
                             <RocketLaunchIcon></RocketLaunchIcon>
                         </div>
-                        <h6 className="feature-title">Excellent Services</h6>
+                        <h6 className="feature-title">Top performance seamlessly</h6>
                         <p className="feature-description">
-                            We have a mission to provide top quality.
+                            Scale instantly, contribute effortlessly
                         </p>
                     </div>
                     <div className="feature-box">
@@ -115,7 +130,7 @@ export default function DisconnectedLanding() {
                         </div>
                         <h6 className="feature-title">Security</h6>
                         <p className="feature-description">
-                            Your data is safe with us as we use only established, reliable technology.
+                            Your data is safe with us as we use only established, reliable technology like TEE
                         </p>
                     </div>
                     <div className="feature-box">

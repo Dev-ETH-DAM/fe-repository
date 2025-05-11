@@ -10,7 +10,7 @@ export default function Footer() {
 							<a href="#">Helpline: +40 000 000 000</a>
 						</li>
 						<li>
-							<a href="#">rigacrypto@gmail.com</a>
+							<a href="#">ChainLabGrid@gmail.com</a>
 						</li>
 					</ul>
 				</div>
@@ -50,15 +50,8 @@ export default function Footer() {
 			</div>
 
 			<div className="footer-bottom">
-				<span className="footer-copy">© 2025 RigaCrypto</span>
-				<div className="footer-icons">
-					<a href="#" aria-label="Instagram" className="footer-icon">
-						
-					</a>
-					<a href="#" aria-label="Facebook" className="footer-icon">
-						
-					</a>
-				</div>
+				<span className="footer-copy">© 2025 ChainLab Grid</span>
+				
 			</div>
 		</footer>
 	);

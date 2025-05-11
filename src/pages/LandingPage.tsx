@@ -1,5 +1,5 @@
-// import { Link } from "react-router-dom";
-// import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
     useAccount,
     useConnect,
@@ -8,15 +8,17 @@ import {
     useWaitForTransactionReceipt,
     useWalletClient,
 } from "wagmi";
-// import { Button } from "@mui/material";
-// import SendIcon from "@mui/icons-material/Send";
-// import { isCalldataEnveloped } from "@oasisprotocol/sapphire-paratime";
+import { Button } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import { isCalldataEnveloped } from "@oasisprotocol/sapphire-paratime";
 
-// import {
-//     deployStorageContract,
-//     sendMessage,
-//     getMessages,
-// } from "@/services/contractService";
+import {
+    deployStorageContract,
+    sendMessage,
+    getMessages,
+    addToRequestQueue,
+    getRequestQueue,
+} from "@/services/contractService";
 import ConnectedLanding from "@/ConnectedLanding.tsx/ConnectedLanding";
 import DisconnectedLanding from "@/components/DisconnectedLanding/DisconnectedLanding";
 
@@ -62,15 +64,16 @@ export default function LandingPage() {
     // };
 
     // const doWrite = async () => {
-    //     if (!account.address || !contractAddress) return;
-    //     const randomContent = `${BigInt(Math.round(Math.random() * 100000))}`;
-    //     const result = await sendMessage(account.address, contractAddress, "cacao", "I love tils");
+    //     console.log("Writing to contract");
+    //     if (!account.address ) return;
+    //   console.log("account.address", account.address);
+    //     const result = await addToRequestQueue(account.address, "{}", "0.1", );
     //     setWriteTxHash(result);
     // };
 
     // const doRead = async () => {
-    //     if (!contractAddress) return;
-    //     const result = await getMessages(contractAddress, "cacao");
+    //     console.log("Reading from contract");
+    //     const result = await getRequestQueue();
     //     console.log(result);
     //     const safeResult = JSON.stringify(result, (_, value) =>
     //         typeof value === "bigint" ? value.toString() : value

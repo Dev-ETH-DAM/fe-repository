@@ -12,7 +12,10 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+.width {
+ width:100vw;
 
+}
 @media (prefers-color-scheme: light) {
   :root {
 
